@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Leaf, MapPin, Gauge, Sprout, Bug, Heart, ChevronRight } from 'lucide-react';
 import { LEVELS, fmt } from '../lib.js';
-import { Reveal, Stagger, itemV, Num, Chip, Bar, Footer } from '../ui.jsx';
+import { Reveal, Stagger, itemV, Num, Chip, Bar, Footer, ThemeToggle } from '../ui.jsx';
 
 const TILES = [
   { id: 'risco', title: 'Risco na minha casa', sub: '3 perguntas rápidas', icon: Gauge, tone: 'peach' },
@@ -33,10 +33,11 @@ export default function Inicio({ clima, go }) {
           </motion.span>
           Cantinho Verde
         </span>
-        <span className="place"><MapPin size={14} aria-hidden="true" />Morro do Papagaio</span>
+        <ThemeToggle />
       </Reveal>
 
       <Reveal className="hello" delay={0.05}>
+        <span className="place"><MapPin size={14} aria-hidden="true" />Morro do Papagaio · BH</span>
         <p className="muted cap">{hoje}</p>
         <h1 className="display">{greeting()},<br />vizinhança</h1>
       </Reveal>

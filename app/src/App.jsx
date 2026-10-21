@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { House, Thermometer, Gauge, Sprout, Bug } from 'lucide-react';
 import { API, CACHE_KEY, CACHE_TTL, store, nivelDe, heatIndex } from './lib.js';
+import { ThemeContext } from './ui.jsx';
 import Inicio from './screens/Inicio.jsx';
 import Clima from './screens/Clima.jsx';
 import Risco from './screens/Risco.jsx';
@@ -56,6 +57,17 @@ export default function App() {
   const [day, setDay] = useState(0);
   const [manual, setManual] = useState({ t: 33, h: 35 });
   const [screen, setScreen] = useState(readHash);
+  const [theme, setTheme] = useState(() => (store('cv-tema') === 'dark' ? 'dark' : 'light'));
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#111915' : '#F6F4EC');
+  }, [theme]);
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    store('cv-tema', next);
+  };
 
   useEffect(() => {
     const onHash = () => setScreen(readHash());
@@ -86,6 +98,7 @@ export default function App() {
   const ctx = { clima, day, setDay, manual, setManual, go };
 
   return (
+    <ThemeContext.Provider value={{ theme, toggle: toggleTheme }}>
     <MotionConfig reducedMotion="user">
       <div className="glow" aria-hidden="true">
         <motion.span className="glow-a" animate={{ x: [0, 30, 0], y: [0, 20, 0] }} transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }} />
@@ -122,5 +135,6 @@ export default function App() {
         </motion.div>
       </nav>
     </MotionConfig>
+    </ThemeContext.Provider>
   );
 }

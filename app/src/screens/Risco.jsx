@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sprout, CircleHelp, RotateCcw } from 'lucide-react';
 import { LEVELS, RISKS, calcRisk, careFor, fmt, store } from '../lib.js';
 import { QUESTIONS } from '../data.js';
-import { Reveal, Stagger, itemV, Bar, Footer, Chip } from '../ui.jsx';
+import { Reveal, Stagger, itemV, Bar, Footer, Chip, ThemeToggle } from '../ui.jsx';
 
 const KEY = 'cv-casa';
 const slide = {
@@ -50,6 +50,7 @@ export default function Risco({ clima, go }) {
     <div className="stack">
       <div className="row-gap">
         <div className="grow"><Bar pct={done ? 100 : ((step + 0.3) / 3) * 100} /></div>
+        <ThemeToggle />
         <motion.button type="button" className="round" aria-label="Fechar e voltar ao início" onClick={() => go('inicio')} whileTap={{ scale: 0.9 }} whileHover={{ rotate: 90 }}>
           <X size={20} aria-hidden="true" />
         </motion.button>

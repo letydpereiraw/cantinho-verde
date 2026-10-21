@@ -1,7 +1,25 @@
-import { useEffect } from 'react';
-import { motion, animate, useMotionValue, useTransform } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { createContext, useContext, useEffect } from 'react';
+import { motion, animate, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Sun, Moon } from 'lucide-react';
 import { fmt } from './lib.js';
+
+export const ThemeContext = createContext({ theme: 'light', toggle: () => {} });
+
+// Botão de sol e lua para trocar entre claro e escuro
+export function ThemeToggle() {
+  const { theme, toggle } = useContext(ThemeContext);
+  const dark = theme === 'dark';
+  return (
+    <motion.button type="button" className="round theme-btn" onClick={toggle} whileTap={{ scale: 0.88 }}
+      aria-label={dark ? 'Mudar para o modo claro' : 'Mudar para o modo escuro'} title={dark ? 'Modo claro' : 'Modo escuro'}>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span key={theme} className="theme-icon" initial={{ rotate: -90, scale: 0.4, opacity: 0 }} animate={{ rotate: 0, scale: 1, opacity: 1 }} exit={{ rotate: 90, scale: 0.4, opacity: 0 }} transition={{ duration: 0.2 }}>
+          {dark ? <Sun size={20} aria-hidden="true" /> : <Moon size={20} aria-hidden="true" />}
+        </motion.span>
+      </AnimatePresence>
+    </motion.button>
+  );
+}
 
 export const spring = { type: 'spring', stiffness: 260, damping: 26 };
 
@@ -65,7 +83,8 @@ export function TopBar({ title, go, sub }) {
         <motion.button type="button" className="round" aria-label="Voltar para o início" onClick={() => go('inicio')} whileTap={{ scale: 0.9 }} whileHover={{ x: -2 }}>
           <ArrowLeft size={20} aria-hidden="true" />
         </motion.button>
-        <h1 className="screen-title">{title}</h1>
+        <h1 className="screen-title grow">{title}</h1>
+        <ThemeToggle />
       </div>
       {sub && <p className="muted">{sub}</p>}
     </Reveal>
